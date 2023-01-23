@@ -1,10 +1,15 @@
 {
-  "extends": [
-    "plugin:@beefchimi/esnext",
-    // "plugin:@beefchimi/react",
-    "plugin:@beefchimi/typescript",
-    "plugin:@beefchimi/jest",
-    // "plugin:@beefchimi/node",
-    "plugin:@beefchimi/prettier"
-  ]
+  "env": {
+    "browser": true,
+    "es2022": true
+  },
+  "extends": ["standard-with-typescript", "prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "prettier/prettier": ["error"]
+  }
 }

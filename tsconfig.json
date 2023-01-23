@@ -1,19 +1,24 @@
 {
-  "extends": "@beefchimi/typescript-config/library.json",
+  "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./src",
-    "rootDir": ".",
-    "types": ["vitest/global"],
-    "declarationDir": "dist/types",
-    "declarationMap": false,
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext", "dom"],
+    "moduleResolution": "node",
+    "strict": true,
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false,
+    "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
     "noEmit": true,
-    "skipLibCheck": false,
-    "useDefineForClassFields": true
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./node_modules/**/*"]
+  "include": ["src"]
 }

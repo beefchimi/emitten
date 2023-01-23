@@ -1,3 +1,4 @@
-import type {Foo} from './types';
+export {Emitten} from './Emitten';
+export {EmittenProtected} from './EmittenProtected';
 
-export const foo: Foo = 'bar';
+export type {EmittenListener, EmittenLibrary} from './types';
