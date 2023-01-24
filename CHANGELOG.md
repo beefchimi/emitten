@@ -1,5 +1,11 @@
 # emitten
 
+## 0.0.2
+
+### Patch Changes
+
+- 2403a01: Force another NPM release
+
 ## 0.0.1
 
 ### Patch Changes
