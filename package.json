@@ -1,6 +1,6 @@
 {
   "name": "emitten",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Barebones TypeScript event emitter",
   "author": "Curtis Dulmage",
   "license": "ISC",
