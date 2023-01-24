@@ -1,4 +1,4 @@
-import {EmittenListener, EmittenLibrary} from './types';
+import type {EmittenListener, EmittenLibrary} from './types';
 
 export class EmittenProtected<T> {
   #multiLibrary: EmittenLibrary<T> = {};
@@ -20,12 +20,12 @@ export class EmittenProtected<T> {
     const multiSet = this.#multiLibrary[eventName];
     const singleSet = this.#singleLibrary[eventName];
 
-    if (multiSet) {
+    if (multiSet != null) {
       multiSet.delete(listener);
       if (multiSet.size === 0) delete this.#multiLibrary[eventName];
     }
 
-    if (singleSet) {
+    if (singleSet != null) {
       singleSet.delete(listener);
       if (singleSet.size === 0) delete this.#singleLibrary[eventName];
     }
@@ -35,7 +35,7 @@ export class EmittenProtected<T> {
     eventName: TKey,
     listener: EmittenListener<T[TKey]>,
   ) {
-    if (!this.#multiLibrary[eventName]) {
+    if (this.#multiLibrary[eventName] == null) {
       this.#multiLibrary[eventName] = new Set();
     }
 
@@ -46,7 +46,7 @@ export class EmittenProtected<T> {
     eventName: TKey,
     listener: EmittenListener<T[TKey]>,
   ) {
-    if (!this.#singleLibrary[eventName]) {
+    if (this.#singleLibrary[eventName] == null) {
       this.#singleLibrary[eventName] = new Set();
     }
 
@@ -58,16 +58,22 @@ export class EmittenProtected<T> {
     listener: EmittenListener<T[TKey]>,
   ) {
     this.on(eventName, listener);
-    return () => this.off(eventName, listener);
+    return () => {
+      this.off(eventName, listener);
+    };
   }
 
   protected emit<TKey extends keyof T>(eventName: TKey, value?: T[TKey]) {
     const multiSet = this.#multiLibrary[eventName];
     const singleSet = this.#singleLibrary[eventName];
 
-    multiSet?.forEach((listener) => listener(value));
+    multiSet?.forEach((listener) => {
+      listener(value);
+    });
 
-    singleSet?.forEach((listener) => listener(value));
+    singleSet?.forEach((listener) => {
+      listener(value);
+    });
     delete this.#singleLibrary[eventName];
   }
 
@@ -75,9 +81,9 @@ export class EmittenProtected<T> {
     const every = (library: EmittenLibrary<T>) => {
       for (const eventName in library) {
         if (Object.hasOwn(library, eventName)) {
-          library[eventName]?.forEach((listener) =>
-            this.off(eventName, listener),
-          );
+          library[eventName]?.forEach((listener) => {
+            this.off(eventName, listener);
+          });
         }
       }
     };

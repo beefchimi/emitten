@@ -340,3 +340,7 @@ protected empty() {
   }
 }
 ```
+
+**No dynamic delete:**
+
+I got sloppy and used the `delete` keyword... I need to remove the `@typescript-eslint/no-dynamic-delete` override and filter that `object` properly.
