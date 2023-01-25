@@ -4,6 +4,11 @@ export class EmittenProtected<T> {
   #multiLibrary: EmittenLibrary<T> = {};
   #singleLibrary: EmittenLibrary<T> = {};
 
+  declare readonly EventFn: <TKey extends keyof T>(
+    eventName: TKey,
+    listener: EmittenListener<T[TKey]>,
+  ) => void;
+
   protected get activeEvents() {
     const multiKeys = Object.keys(this.#multiLibrary);
     const singleKeys = Object.keys(this.#singleLibrary);
@@ -13,10 +18,7 @@ export class EmittenProtected<T> {
     return [...dedupedKeys];
   }
 
-  protected off<TKey extends keyof T>(
-    eventName: TKey,
-    listener: EmittenListener<T[TKey]>,
-  ) {
+  protected off: typeof this.EventFn = (eventName, listener) => {
     const multiSet = this.#multiLibrary[eventName];
     const singleSet = this.#singleLibrary[eventName];
 
@@ -29,40 +31,32 @@ export class EmittenProtected<T> {
       singleSet.delete(listener);
       if (singleSet.size === 0) delete this.#singleLibrary[eventName];
     }
-  }
+  };
 
-  protected on<TKey extends keyof T>(
-    eventName: TKey,
-    listener: EmittenListener<T[TKey]>,
-  ) {
+  protected on: typeof this.EventFn = (eventName, listener) => {
     if (this.#multiLibrary[eventName] == null) {
       this.#multiLibrary[eventName] = new Set();
     }
 
     this.#multiLibrary[eventName]?.add(listener);
-  }
+  };
 
-  protected once<TKey extends keyof T>(
-    eventName: TKey,
-    listener: EmittenListener<T[TKey]>,
-  ) {
+  protected once: typeof this.EventFn = (eventName, listener) => {
     if (this.#singleLibrary[eventName] == null) {
       this.#singleLibrary[eventName] = new Set();
     }
 
     this.#singleLibrary[eventName]?.add(listener);
-  }
+  };
 
-  protected disposable<TKey extends keyof T>(
-    eventName: TKey,
-    listener: EmittenListener<T[TKey]>,
-  ) {
+  // TODO: Should return `() => void`.
+  protected disposable: typeof this.EventFn = (eventName, listener) => {
     this.on(eventName, listener);
 
     return () => {
       this.off(eventName, listener);
     };
-  }
+  };
 
   protected emit<TKey extends keyof T>(eventName: TKey, value?: T[TKey]) {
     const multiSet = this.#multiLibrary[eventName];
