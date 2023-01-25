@@ -4,7 +4,7 @@ export class EmittenProtected<T> {
   #multiLibrary: EmittenLibrary<T> = {};
   #singleLibrary: EmittenLibrary<T> = {};
 
-  get activeEvents() {
+  protected get activeEvents() {
     const multiKeys = Object.keys(this.#multiLibrary);
     const singleKeys = Object.keys(this.#singleLibrary);
 
@@ -13,7 +13,7 @@ export class EmittenProtected<T> {
     return [...dedupedKeys];
   }
 
-  off<TKey extends keyof T>(
+  protected off<TKey extends keyof T>(
     eventName: TKey,
     listener: EmittenListener<T[TKey]>,
   ) {
@@ -31,7 +31,7 @@ export class EmittenProtected<T> {
     }
   }
 
-  on<TKey extends keyof T>(
+  protected on<TKey extends keyof T>(
     eventName: TKey,
     listener: EmittenListener<T[TKey]>,
   ) {
@@ -42,7 +42,7 @@ export class EmittenProtected<T> {
     this.#multiLibrary[eventName]?.add(listener);
   }
 
-  once<TKey extends keyof T>(
+  protected once<TKey extends keyof T>(
     eventName: TKey,
     listener: EmittenListener<T[TKey]>,
   ) {
@@ -53,11 +53,12 @@ export class EmittenProtected<T> {
     this.#singleLibrary[eventName]?.add(listener);
   }
 
-  disposable<TKey extends keyof T>(
+  protected disposable<TKey extends keyof T>(
     eventName: TKey,
     listener: EmittenListener<T[TKey]>,
   ) {
     this.on(eventName, listener);
+
     return () => {
       this.off(eventName, listener);
     };
@@ -74,6 +75,7 @@ export class EmittenProtected<T> {
     singleSet?.forEach((listener) => {
       listener(value);
     });
+
     delete this.#singleLibrary[eventName];
   }
 
