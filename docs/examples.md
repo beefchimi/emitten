@@ -47,6 +47,16 @@ myEvents.on('count', handleCount);
 // In order to remove this, you will have to call `.empty()`.
 myEvents.on('count', (value) => console.log('2nd count listener', value));
 
+// Alternatively, you can register a listener using
+// `.disposable()`, which will return the corresponding
+// `.off()` method to make removal easier.
+const registered = myEvents.on('count', (value) =>
+  console.log('An anonymous function', value),
+);
+
+// The listener can now be removed by calling the return value.
+registered();
+
 // Subscribe to the `other` event only once. The
 // subscription will be automatically removed upon `emit`.
 myEvents.once('other', handleOther);
