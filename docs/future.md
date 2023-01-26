@@ -4,45 +4,48 @@ This document describes some of the follow-up tasks I have in mind.
 
 ## Stricter callback argument
 
-It would be nice to make it so the `value` argument isn't optional.
+I seem to have gotten close to successfully typing the `...values` argument for `EmittenListener`, but I am still failing to:
+
+**Figure out how to correctly type a custom `EventMap`:**
+
+- Currently, I get an error on the generic for `new Emitten<EventMap>()`:
+  - `Type 'EventMap' does not satisfy the constraint 'EmittenMap'.`
+  - `Index signature for type 'string' is missing in type 'EventMap'`
+
+**Figure out how to limit the number of `values`:**
+
+This _could be resolved_ once I figure out the error above. But currently - while I do get some better typing on my listener arguments - I seem to get inconsistent type complains when passing arguments:
 
 ```ts
-// I might register a listener that will ALWAYS
-// pass an argument of a specific type.
-function handleChange(data: SomeObject) {
-  return Object.keys(data);
-}
-
-// I will get a type error here, because `data`
-// was not marked as “optional”.
-myEvents.on('change', handleChange);
-
-// Calling `emit` does not require a 2nd argument.
-myEvents.emit('change');
-```
-
-I would like to find a way to type the `EventMap` generic passed to `Emitten` to that you have more control over how the values are typed.
-
-```ts
-// Not sure if the `EmittenListener` type needs to change,
-// but it is possible it changes to something like:
-type EmittenListener<T> = (...values: T[]) => void;
-
-// Then `EventMap` can maybe look something like this:
 interface EventMap {
-  change: (value: string, other?: boolean) => void;
-  count: (value: number) => void;
-  other: (value: string[]) => void;
+  hello(value: string): void;
+  count(value: number): void;
+  multi(one: string, two: number, three?: boolean): void;
+  single(value?: boolean): void;
+  all(): void;
 }
 
-// Then the `emit` method maybe looks something like this:
-function emit<TKey extends keyof T>(
-  eventName: TKey,
-  value: Parameters<T[TKey]>,
-) {}
+// Double check that this works as expected.
+menuEvents.on('hello', (one, two, three) => {});
+
+// The extra arguments may not always get reported?
+menuEvents.emit('hello', 'Hello World', 123);
+menuEvents.emit('multi', '1', 2, false, 'hello', true);
 ```
 
-This will require some experimentation.
+But, it might be that using a `type` instead of `interface` will work:
+
+```ts
+type EventMap = EmittenMap & {
+  hello(value: string): void;
+  count(value: number): void;
+  multi(one: string, two: number, three?: boolean): void;
+  single(value?: boolean): void;
+  all(): void;
+};
+
+const menuEvents = new Emitten<EventMap>();
+```
 
 ## No dynamic delete
 
