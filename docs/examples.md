@@ -50,7 +50,7 @@ myEvents.on('count', (value) => console.log('2nd count listener', value));
 // Alternatively, you can register a listener using
 // `.disposable()`, which will return the corresponding
 // `.off()` method to make removal easier.
-const registered = myEvents.on('count', (value) =>
+const registered = myEvents.disposable('count', (value) =>
   console.log('An anonymous function', value),
 );
 
@@ -107,12 +107,23 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
   }
 
   // If required, you can expose any `protected` members.
-  public emit<TKey extends keyof ExtendedEventMap>(
+  // Helper `Fn` types are provided to make exposure easier.
+  public on: EmittenCommonFn<ExtendedEventMap> = (eventName, listener) => {
+    super.on(eventName, listener);
+  };
+
+  // Without using the hlper `Fn` types, the exposure
+  // would look like this:
+  public off = <TKey extends keyof ExtendedEventMap>(
     eventName: TKey,
-    value?: ExtendedEventMap[TKey],
-  ) {
+    listener: EmittenListener<ExtendedEventMap[TKey]>,
+  ) => {
+    super.off(eventName, listener);
+  };
+
+  public emit: EmittenEmitFn<ExtendedEventMap> = (eventName, value) => {
     super.emit(eventName, value);
-  }
+  };
 
   report() {
     return this.activeEvents;
@@ -138,6 +149,10 @@ extended.empty();
 We can of course create classes that do not extend `Emitten`, and instead create a `private` instance of `Emitten` to perform event actions on.
 
 ```ts
+function assertValue(value?: string): value is string {
+  return Boolean(value?.length);
+}
+
 class AnotherExample {
   #id = 'DefaultId';
   #counter = 0;
@@ -153,7 +168,7 @@ class AnotherExample {
 
   constructor() {
     this.#handleChange = (value) => {
-      this.#id = value?.length ? value : this.#id;
+      this.#id = assertValue(value) ? value : this.#id;
       console.log('#handleChange', value);
     };
 
