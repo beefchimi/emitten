@@ -1,11 +1,5 @@
 import type {EmittenListener, EmittenLibrary} from './types';
 
-export type EmittenOffFn<T> = EmittenProtected<T>['off'];
-export type EmittenOnFn<T> = EmittenProtected<T>['on'];
-export type EmittenOnceFn<T> = EmittenProtected<T>['once'];
-export type EmittenDisposableFn<T> = EmittenProtected<T>['disposable'];
-export type EmittenEmitFn<T> = EmittenProtected<T>['emit'];
-
 export class EmittenProtected<TEventMap> {
   #multiLibrary: EmittenLibrary<TEventMap> = {};
   #singleLibrary: EmittenLibrary<TEventMap> = {};

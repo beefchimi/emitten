@@ -6,7 +6,7 @@ Below are some common use-cases for `Emitten` and `EmittenProtected`.
 
 The easiest way to use `Emitten` is to simply instantiate it and begin wiring up your logic.
 
-For this use case, you most likely want to use `Emitten` instead of `EmittenProtected`. If you instantiate using `EmittenProtected`, you will not be able to call any `protected` members, such as `.emit()` or `.empty()`.
+For this use case, you most likely want to use `Emitten` instead of `EmittenProtected`. If you instantiate using `EmittenProtected`, you will not be able to call any `protected` members.
 
 ```ts
 import {Emitten} from 'emitten';
@@ -132,12 +132,13 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
 
 const extended = new ExtendedEmitten();
 
-extended.on('custom', (value) => console.log('value', value));
-extended.report();
+// Since we converted both `.on()` and `.emit()` to be `public`,
+// we can safely call them on the instance.
 
-// Since we converted `.emit()` to a `public` member,
-// we can safely call this on the instance.
+extended.on('custom', (value) => console.log('value', value));
 extended.emit('custom', 'hello');
+
+extended.report();
 
 // However, we did not expose `.empty()`, so we will
 // receive a TypeScript error attempting to call this.
