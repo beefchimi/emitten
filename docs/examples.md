@@ -100,30 +100,30 @@ interface ExtendedEventMap {
 }
 
 class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
-  constructor() {
-    // `ExtendedEmitten` now has all of the `properties`,
-    // `accessors`, and `methods` from `EmittenProtected`.
-    super();
-  }
+  // If required, you can selectively expose any `protected` members.
+  // Otherwise, if you want all members to be `public`, you can
+  // extend the `Emitten` class instead.
 
-  // If required, you can expose any `protected` members.
-  // Helper `Fn` types are provided to make exposure easier.
-  public on: EmittenCommonFn<ExtendedEventMap> = (eventName, listener) => {
-    super.on(eventName, listener);
-  };
-
-  // Without using the hlper `Fn` types, the exposure
-  // would look like this:
-  public off = <TKey extends keyof ExtendedEventMap>(
+  public on<TKey extends keyof ExtendedEventMap>(
     eventName: TKey,
     listener: EmittenListener<ExtendedEventMap[TKey]>,
-  ) => {
-    super.off(eventName, listener);
-  };
+  ) {
+    super.on(eventName, listener);
+  }
 
-  public emit: EmittenEmitFn<ExtendedEventMap> = (eventName, value) => {
+  public off<TKey extends keyof ExtendedEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<ExtendedEventMap[TKey]>,
+  ) {
+    super.off(eventName, listener);
+  }
+
+  public emit<TKey extends keyof ExtendedEventMap>(
+    eventName: TKey,
+    value?: ExtendedEventMap[TKey],
+  ) {
     super.emit(eventName, value);
-  };
+  }
 
   report() {
     return this.activeEvents;

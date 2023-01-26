@@ -1,33 +1,48 @@
 import {EmittenProtected} from './EmittenProtected';
-import type {EmittenCommonFn, EmittenDisposeFn, EmittenEmitFn} from './types';
+import type {EmittenListener} from './types';
 
 export class Emitten<TEventMap> extends EmittenProtected<TEventMap> {
   public get activeEvents() {
     return super.activeEvents;
   }
 
-  public off: EmittenCommonFn<TEventMap> = (eventName, listener) => {
+  public off<TKey extends keyof TEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<TEventMap[TKey]>,
+  ) {
     super.off(eventName, listener);
-  };
+  }
 
-  public on: EmittenCommonFn<TEventMap> = (eventName, listener) => {
+  public on<TKey extends keyof TEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<TEventMap[TKey]>,
+  ) {
     super.on(eventName, listener);
-  };
+  }
 
-  public once: EmittenCommonFn<TEventMap> = (eventName, listener) => {
+  public once<TKey extends keyof TEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<TEventMap[TKey]>,
+  ) {
     super.once(eventName, listener);
-  };
+  }
 
-  public disposable: EmittenDisposeFn<TEventMap> = (eventName, listener) => {
+  public disposable<TKey extends keyof TEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<TEventMap[TKey]>,
+  ) {
     const result = super.disposable(eventName, listener);
     return result;
-  };
+  }
 
-  public emit: EmittenEmitFn<TEventMap> = (eventName, value) => {
+  public emit<TKey extends keyof TEventMap>(
+    eventName: TKey,
+    value?: TEventMap[TKey],
+  ) {
     super.emit(eventName, value);
-  };
+  }
 
-  public empty = () => {
+  public empty() {
     super.empty();
-  };
+  }
 }
