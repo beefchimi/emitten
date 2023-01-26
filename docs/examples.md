@@ -6,7 +6,7 @@ Below are some common use-cases for `Emitten` and `EmittenProtected`.
 
 The easiest way to use `Emitten` is to simply instantiate it and begin wiring up your logic.
 
-For this use case, you most likely want to use `Emitten` instead of `EmittenProtected`. If you instantiate using `EmittenProtected`, you will not be able to call any `protected` members, such as `.emit()` or `.empty()`.
+For this use case, you most likely want to use `Emitten` instead of `EmittenProtected`. If you instantiate using `EmittenProtected`, you will not be able to call any `protected` members.
 
 ```ts
 import {Emitten} from 'emitten';
@@ -50,7 +50,7 @@ myEvents.on('count', (value) => console.log('2nd count listener', value));
 // Alternatively, you can register a listener using
 // `.disposable()`, which will return the corresponding
 // `.off()` method to make removal easier.
-const registered = myEvents.on('count', (value) =>
+const registered = myEvents.disposable('count', (value) =>
   console.log('An anonymous function', value),
 );
 
@@ -100,13 +100,24 @@ interface ExtendedEventMap {
 }
 
 class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
-  constructor() {
-    // `ExtendedEmitten` now has all of the `properties`,
-    // `accessors`, and `methods` from `EmittenProtected`.
-    super();
+  // If required, you can selectively expose any `protected` members.
+  // Otherwise, if you want all members to be `public`, you can
+  // extend the `Emitten` class instead.
+
+  public on<TKey extends keyof ExtendedEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<ExtendedEventMap[TKey]>,
+  ) {
+    super.on(eventName, listener);
   }
 
-  // If required, you can expose any `protected` members.
+  public off<TKey extends keyof ExtendedEventMap>(
+    eventName: TKey,
+    listener: EmittenListener<ExtendedEventMap[TKey]>,
+  ) {
+    super.off(eventName, listener);
+  }
+
   public emit<TKey extends keyof ExtendedEventMap>(
     eventName: TKey,
     value?: ExtendedEventMap[TKey],
@@ -121,12 +132,13 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
 
 const extended = new ExtendedEmitten();
 
-extended.on('custom', (value) => console.log('value', value));
-extended.report();
+// Since we converted both `.on()` and `.emit()` to be `public`,
+// we can safely call them on the instance.
 
-// Since we converted `.emit()` to a `public` member,
-// we can safely call this on the instance.
+extended.on('custom', (value) => console.log('value', value));
 extended.emit('custom', 'hello');
+
+extended.report();
 
 // However, we did not expose `.empty()`, so we will
 // receive a TypeScript error attempting to call this.
@@ -138,6 +150,10 @@ extended.empty();
 We can of course create classes that do not extend `Emitten`, and instead create a `private` instance of `Emitten` to perform event actions on.
 
 ```ts
+function assertValue(value?: string): value is string {
+  return Boolean(value?.length);
+}
+
 class AnotherExample {
   #id = 'DefaultId';
   #counter = 0;
@@ -153,7 +169,7 @@ class AnotherExample {
 
   constructor() {
     this.#handleChange = (value) => {
-      this.#id = value?.length ? value : this.#id;
+      this.#id = assertValue(value) ? value : this.#id;
       console.log('#handleChange', value);
     };
 

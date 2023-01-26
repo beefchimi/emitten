@@ -44,35 +44,6 @@ function emit<TKey extends keyof T>(
 
 This will require some experimentation.
 
-## Private iterator
-
-It would be nice to have a `every()` method to iterate over all `listeners` for each `event` within a `library`.
-
-This isn’t so please though, as `.bind(this)` ends up being required when calling `.empty()`.
-
-```ts
-protected empty() {
-  this.#every(this.#multiLibrary, this.off.bind(this));
-  this.#every(this.#singleLibrary, this.off.bind(this));
-}
-
-#every(
-  library: EmittenLibrary<T>,
-  callback: <TKey extends keyof T>(
-    eventName: TKey,
-    listener: EmittenListener<T[TKey]>,
-  ) => void,
-) {
-  for (const eventName in library) {
-    if (Object.prototype.hasOwnProperty.call(library, eventName)) {
-      library[eventName]?.forEach((listener) =>
-        callback(eventName, listener),
-      );
-    }
-  }
-}
-```
-
 ## No dynamic delete
 
 I got sloppy and used the `delete` keyword... I need to remove the `@typescript-eslint/no-dynamic-delete` override and filter that `object` properly.

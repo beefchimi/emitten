@@ -1,5 +1,5 @@
-export type EmittenListener<T> = (value?: T) => void;
+export type EmittenListener<TValue> = (value?: TValue) => void;
 
-export type EmittenLibrary<T> = {
-  [eventName in keyof T]?: Set<EmittenListener<T[eventName]>>;
+export type EmittenLibrary<TEventMap> = {
+  [event in keyof TEventMap]?: Set<EmittenListener<TEventMap[event]>>;
 };
