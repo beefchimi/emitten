@@ -1,8 +1,8 @@
 import type {EmittenMap, EmittenLibraryPartial} from './types';
 
-export class EmittenProtected<TEventMap extends EmittenMap> {
-  #multiLibrary: EmittenLibraryPartial<TEventMap> = {};
-  #singleLibrary: EmittenLibraryPartial<TEventMap> = {};
+export class EmittenProtected<T extends EmittenMap> {
+  #multiLibrary: EmittenLibraryPartial<T> = {};
+  #singleLibrary: EmittenLibraryPartial<T> = {};
 
   protected get activeEvents() {
     // This redundant getter + method are required
@@ -19,10 +19,7 @@ export class EmittenProtected<TEventMap extends EmittenMap> {
     return [...dedupedKeys];
   }
 
-  protected off<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  protected off<K extends keyof T>(eventName: K, listener: T[K]) {
     const multiSet = this.#multiLibrary[eventName];
     const singleSet = this.#singleLibrary[eventName];
 
@@ -37,10 +34,7 @@ export class EmittenProtected<TEventMap extends EmittenMap> {
     }
   }
 
-  protected on<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  protected on<K extends keyof T>(eventName: K, listener: T[K]) {
     if (this.#multiLibrary[eventName] == null) {
       this.#multiLibrary[eventName] = new Set();
     }
@@ -48,10 +42,7 @@ export class EmittenProtected<TEventMap extends EmittenMap> {
     this.#multiLibrary[eventName]?.add(listener);
   }
 
-  protected once<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  protected once<K extends keyof T>(eventName: K, listener: T[K]) {
     if (this.#singleLibrary[eventName] == null) {
       this.#singleLibrary[eventName] = new Set();
     }
@@ -59,10 +50,7 @@ export class EmittenProtected<TEventMap extends EmittenMap> {
     this.#singleLibrary[eventName]?.add(listener);
   }
 
-  protected disposable<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  protected disposable<K extends keyof T>(eventName: K, listener: T[K]) {
     this.on(eventName, listener);
 
     return () => {
@@ -70,10 +58,7 @@ export class EmittenProtected<TEventMap extends EmittenMap> {
     };
   }
 
-  protected emit<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    ...values: Parameters<TEventMap[TKey]>
-  ) {
+  protected emit<K extends keyof T>(eventName: K, ...values: Parameters<T[K]>) {
     const multiSet = this.#multiLibrary[eventName];
     const singleSet = this.#singleLibrary[eventName];
 
@@ -93,7 +78,7 @@ export class EmittenProtected<TEventMap extends EmittenMap> {
     this.#every(this.#singleLibrary);
   }
 
-  #every = (library: EmittenLibraryPartial<TEventMap>) => {
+  #every = (library: EmittenLibraryPartial<T>) => {
     for (const eventName in library) {
       if (Object.hasOwn(library, eventName)) {
         library[eventName]?.forEach((listener) => {

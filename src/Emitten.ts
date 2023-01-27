@@ -1,46 +1,29 @@
 import {EmittenProtected} from './EmittenProtected';
 import type {EmittenMap} from './types';
 
-export class Emitten<
-  TEventMap extends EmittenMap,
-> extends EmittenProtected<TEventMap> {
+export class Emitten<T extends EmittenMap> extends EmittenProtected<T> {
   public get activeEvents() {
     return super.getActiveEvents();
   }
 
-  public off<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  public off<K extends keyof T>(eventName: K, listener: T[K]) {
     super.off(eventName, listener);
   }
 
-  public on<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  public on<K extends keyof T>(eventName: K, listener: T[K]) {
     super.on(eventName, listener);
   }
 
-  public once<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  public once<K extends keyof T>(eventName: K, listener: T[K]) {
     super.once(eventName, listener);
   }
 
-  public disposable<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    listener: TEventMap[TKey],
-  ) {
+  public disposable<K extends keyof T>(eventName: K, listener: T[K]) {
     const result = super.disposable(eventName, listener);
     return result;
   }
 
-  public emit<TKey extends keyof TEventMap>(
-    eventName: TKey,
-    ...values: Parameters<TEventMap[TKey]>
-  ) {
+  public emit<K extends keyof T>(eventName: K, ...values: Parameters<T[K]>) {
     super.emit(eventName, ...values);
   }
 
