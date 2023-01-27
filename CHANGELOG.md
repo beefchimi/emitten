@@ -1,5 +1,11 @@
 # emitten
 
+## 0.2.0
+
+### Minor Changes
+
+- a98bdbc: Implement a workaround for calling super on an accessor.
+
 ## 0.1.0
 
 ### Minor Changes
