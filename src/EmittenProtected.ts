@@ -5,6 +5,12 @@ export class EmittenProtected<TEventMap> {
   #singleLibrary: EmittenLibrary<TEventMap> = {};
 
   protected get activeEvents() {
+    // This redundant getter + method are required
+    // because you cannot call `super` on an accessor.
+    return this.getActiveEvents();
+  }
+
+  protected getActiveEvents() {
     const multiKeys = Object.keys(this.#multiLibrary);
     const singleKeys = Object.keys(this.#singleLibrary);
 
