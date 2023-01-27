@@ -3,7 +3,7 @@ import type {EmittenListener} from './types';
 
 export class Emitten<TEventMap> extends EmittenProtected<TEventMap> {
   public get activeEvents() {
-    return super.activeEvents;
+    return super.getActiveEvents();
   }
 
   public off<TKey extends keyof TEventMap>(
