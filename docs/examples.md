@@ -104,6 +104,12 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
   // Otherwise, if you want all members to be `public`, you can
   // extend the `Emitten` class instead.
 
+  public get activeEvents() {
+    // Must use the `method`, since `super` cannot
+    // be called on an accessor.
+    return super.getActiveEvents();
+  }
+
   public on<TKey extends keyof ExtendedEventMap>(
     eventName: TKey,
     listener: EmittenListener<ExtendedEventMap[TKey]>,
