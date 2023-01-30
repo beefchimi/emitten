@@ -2,11 +2,7 @@
 
 This document describes some of the follow-up tasks I have in mind.
 
-## Stricter callback argument
-
-I seem to have gotten close to successfully typing the `...values` argument for `EmittenListener`, but I am still failing to:
-
-**Figure out how to correctly type a custom `EventMap`:**
+## correctly type a custom `EventMap`
 
 - Currently, I get an error on the generic for `new Emitten<EventMap>()`:
   - `Type 'EventMap' does not satisfy the constraint 'EmittenMap'.`
@@ -38,10 +34,6 @@ const menuEvents = new Emitten<EventMap>();
 
 It would be nice if I could avoid this.
 
-## No dynamic delete
-
-I got sloppy and used the `delete` keyword... I need to remove the `@typescript-eslint/no-dynamic-delete` override and filter that `object` properly.
-
 ## Write tests
 
 I have not actually authored any tests yet... but I plan to use `vitest` once Iâ€™m ready.
@@ -51,6 +43,10 @@ I have not actually authored any tests yet... but I plan to use `vitest` once Iâ
 I might need to add `typescript` as a peer dep.
 
 Also, `@changesets` should be moved to `devDeps`.
+
+## No dynamic delete
+
+I got sloppy and used the `delete` keyword... I need to remove the `@typescript-eslint/no-dynamic-delete` override and filter that `object` properly.
 
 ## Revisit loose equality checks
 
