@@ -52,10 +52,6 @@ I might need to add `typescript` as a peer dep.
 
 Also, `@changesets` should be moved to `devDeps`.
 
-## Remove `disposable` in favour of `on`
-
-I can probably jsut return the `.off` within `.on`... I don't think we need a separate `disposable` method.
-
 ## Revisit loose equality checks
 
 There are some `null` checks in `EmittenProtected` I wan't to more thoroughly check.

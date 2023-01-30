@@ -62,10 +62,10 @@ myEvents.on('count', (value) => {
   console.log('2nd count listener', value);
 });
 
-// However, you can register a listener using
-// `.disposable()`, which will return the corresponding
-// `.off()` method to make removal easier!
-const disposeRest = myEvents.disposable('rest', (required, ...optional) => {
+// However, `.on()` will return the corresponding “dispose”
+// for that listener. Simply capture the “disposable” and
+// call it when you are ready to remove that listener.
+const disposeRest = myEvents.on('rest', (required, ...optional) => {
   console.log('An anonymous `rest` function', required, ...optional);
 });
 
@@ -128,7 +128,8 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
     eventName: K,
     listener: ExtendedEventMap[K],
   ) {
-    super.on(eventName, listener);
+    const dispose = super.on(eventName, listener);
+    return dispose;
   }
 
   public off<K extends keyof ExtendedEventMap>(
