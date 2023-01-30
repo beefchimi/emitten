@@ -1,4 +1,10 @@
 export {Emitten} from './Emitten';
 export {EmittenProtected} from './EmittenProtected';
 
-export type {EmittenListener, EmittenLibrary} from './types';
+export type {
+  EmittenKey,
+  EmittenListener,
+  EmittenMap,
+  EmittenLibrary,
+  EmittenLibraryPartial,
+} from './types';
