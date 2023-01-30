@@ -15,8 +15,9 @@ export class EmittenProtected<T extends EmittenMap> {
     const singleKeys = Object.keys(this.#singleLibrary);
 
     const dedupedKeys = new Set([...multiKeys, ...singleKeys]);
+    const result: Array<keyof T> = [...dedupedKeys];
 
-    return [...dedupedKeys];
+    return result;
   }
 
   protected off<K extends keyof T>(eventName: K, listener: T[K]) {

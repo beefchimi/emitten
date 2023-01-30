@@ -3,7 +3,7 @@ import type {EmittenMap} from './types';
 
 export class Emitten<T extends EmittenMap> extends EmittenProtected<T> {
   public get activeEvents() {
-    return super.getActiveEvents();
+    return this.getActiveEvents();
   }
 
   public off<K extends keyof T>(eventName: K, listener: T[K]) {
