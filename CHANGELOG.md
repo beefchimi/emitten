@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 591f16d: - Prefer variadic listener arguments.
+- 591f16d: Prefer variadic listener arguments.
   - Remove `.disposable()` method. Now returning the `dispose` function from `.on()`.
 
 ### Patch Changes
