@@ -18,7 +18,7 @@ type EventMap = EmittenMap & {
   change(value: string): void;
   count(value?: number): void;
   collect(values: boolean[]): void;
-  rest(value: string, ...more: string[]): void;
+  rest(required: string, ...optional: string[]): void;
   nothing(): void;
 };
 
@@ -65,8 +65,8 @@ myEvents.on('count', (value) => {
 // However, you can register a listener using
 // `.disposable()`, which will return the corresponding
 // `.off()` method to make removal easier!
-const disposeRest = myEvents.disposable('rest', (value, ...more) => {
-  console.log('An anonymous `rest` function', value, ...more);
+const disposeRest = myEvents.disposable('rest', (required, ...optional) => {
+  console.log('An anonymous `rest` function', required, ...optional);
 });
 
 // Lastly, an example of `listener` without any arguments.
@@ -96,6 +96,7 @@ myEvents.emit('collect', [true, false, true]);
 myEvents.emit('nope');
 myEvents.emit('change', '1st string', '2nd string');
 myEvents.emit('count', true);
+myEvents.emit('rest');
 myEvents.emit('nothing', 'something');
 
 // Can manually remove an individual listener by reference.
@@ -122,12 +123,6 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
   // If required, you can selectively expose any `protected` members.
   // Otherwise, if you want all members to be `public`, you can
   // extend the `Emitten` class instead.
-
-  public get activeEvents() {
-    // Must use the `method`, since `super` cannot
-    // be called on an accessor.
-    return super.getActiveEvents();
-  }
 
   public on<K extends keyof ExtendedEventMap>(
     eventName: K,
@@ -178,7 +173,8 @@ We can of course create classes that do not extend `Emitten`, and instead create
 type AnotherMap = EmittenMap & {
   change(value: string): void;
   count(value?: number): void;
-  names(value: string, ...more: string[]): void;
+  names(...values: string[]): void;
+  diverse(first: string, second: number, ...last: boolean[]): void;
 };
 
 class AnotherExample {
@@ -188,11 +184,12 @@ class AnotherExample {
 
   // Would not be able to call any methods
   // if we had used `EmittenProtected`.
-  #events = new Emitten<EventMap>();
+  #events = new Emitten<AnotherMap>();
 
   #handleChange: AnotherMap['change'];
   #handleCount: AnotherMap['count'];
   #handleNames: AnotherMap['names'];
+  #handleDiverse: AnotherMap['diverse'];
 
   constructor() {
     this.#handleChange = (value) => {
@@ -210,22 +207,28 @@ class AnotherExample {
       console.log('#handleCount', value);
     };
 
-    this.#handleNames = (value, ...rest) => {
-      const collected = [value, ...rest];
-      this.#names = [...this.#names, ...collected];
-      console.log('#handleNames', collected);
+    this.#handleNames = (...values) => {
+      this.#names = [...this.#names, ...values];
+      console.log('#handleNames', values);
+    };
+
+    this.#handleDiverse = (first, second, ...last) => {
+      console.log('#handleDiverse > first', first);
+      console.log('#handleDiverse > second', second);
+      console.log('#handleDiverse > last', last);
     };
 
     this.#events.on('change', this.#handleChange);
+    this.#events.on('count', this.#handleCount);
+    this.#events.on('names', this.#handleNames);
 
     // Registering the same `listener` on the same `event`
-    // will not create duplicate entries. When `count` is
-    // emitted, we will see only one call to `#handleCount()`.
-    this.#events.on('count', this.#handleCount);
-    this.#events.on('count', this.#handleCount);
-    this.#events.on('count', this.#handleCount);
-
-    this.#events.on('names', this.#handleNames);
+    // will not create duplicate entries. When `diverse` is
+    // emitted, we will see only one call to `#handleDiverse()`.
+    this.#events.on('diverse', this.#handleDiverse);
+    this.#events.on('diverse', this.#handleDiverse);
+    this.#events.on('diverse', this.#handleDiverse);
+    this.#events.on('diverse', this.#handleDiverse);
   }
 
   get currentId() {
@@ -252,8 +255,12 @@ class AnotherExample {
     this.#events.emit('count', this.#counter);
   }
 
-  names(value: string, ...more: string[]) {
-    this.#events.emit('names', value, ...more);
+  names(...values: string[]) {
+    this.#events.emit('names', ...values);
+  }
+
+  diverse(first: string, second: number, ...last: boolean[]) {
+    this.#events.emit('diverse', first, second, ...last);
   }
 
   destroy() {
@@ -278,6 +285,14 @@ document.addEventListener('click', () => {
   myExample.change('clicked');
   myExample.count();
   myExample.names(...otherData);
+  myExample.diverse(
+    'call to diverse',
+    myExample.currentCount,
+    true,
+    false,
+    true,
+    false,
+  );
 
   if (myExample.currentOther.length > otherCollection.length) {
     console.log('Events BEFORE emptying:', myExample.events);

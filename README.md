@@ -16,17 +16,20 @@ Import and start emit’in!
 
 ```ts
 import {Emitten} from 'emitten';
+import type {EmittenMap} from 'emitten';
 
-interface EventMap {
-  change: string;
-  count: number;
-  other: string[];
-}
+type EventMap = EmittenMap & {
+  change(value: string): void;
+  count(value?: number): void;
+  collect(...values: boolean[]): void;
+};
 
 const myEmitter = new Emitten<EventMap>();
 
-myEmitter.on('change', someFunction);
+const dispose = myEmitter.on('change', (value) => {});
 myEmitter.emit('change', 'Hello world');
+
+dispose();
 ```
 
 For more guidance, please take a look at the [`Examples document`](./docs/examples.md).
