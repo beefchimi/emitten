@@ -12,10 +12,6 @@ I seem to have gotten close to successfully typing the `...values` argument for 
   - `Type 'EventMap' does not satisfy the constraint 'EmittenMap'.`
   - `Index signature for type 'string' is missing in type 'EventMap'`
 
-**Figure out how to limit the number of `values`:**
-
-This _could be resolved_ once I figure out the error above. But currently - while I do get some better typing on my listener arguments - I seem to get inconsistent type complains when passing arguments:
-
 ```ts
 interface EventMap {
   hello(value: string): void;
@@ -24,16 +20,9 @@ interface EventMap {
   single(value?: boolean): void;
   all(): void;
 }
-
-// Double check that this works as expected.
-menuEvents.on('hello', (one, two, three) => {});
-
-// The extra arguments may not always get reported?
-menuEvents.emit('hello', 'Hello World', 123);
-menuEvents.emit('multi', '1', 2, false, 'hello', true);
 ```
 
-But, it might be that using a `type` instead of `interface` will work:
+At the moment, I need to make sure the `Generic` passed to `Emitten` always `extends EmittenMap`:
 
 ```ts
 type EventMap = EmittenMap & {
@@ -46,6 +35,8 @@ type EventMap = EmittenMap & {
 
 const menuEvents = new Emitten<EventMap>();
 ```
+
+It would be nice if I could avoid this.
 
 ## No dynamic delete
 
@@ -68,3 +59,7 @@ I can probably jsut return the `.off` within `.on`... I don't think we need a se
 ## Revisit loose equality checks
 
 There are some `null` checks in `EmittenProtected` I wan't to more thoroughly check.
+
+## Reconsider some TSConfig/ESLint
+
+I already know that I want to remove the `@typescript-eslint/no-dynamic-delete` fron `.eslintrc`. Additionally, I might want to disable `@typescript-eslint/strict-boolean-expressions`.
