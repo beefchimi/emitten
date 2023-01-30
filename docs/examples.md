@@ -10,17 +10,33 @@ For this use case, you most likely want to use `Emitten` instead of `EmittenProt
 
 ```ts
 // Start by defining your “event map”.
-// This is an `interface` comprised of
+// This is a `Record` type comprised of
 // `eventName -> listener function`.
-// This type MUST EXTEND `EmittenMap`.
 
-type EventMap = EmittenMap & {
+// It is recommended to use the `type` keyword instead of `interface`!
+// There is an important distinction... using `type`, you will:
+// 1. Not need to `extend` from `EmittenMap`.
+// 2. Automatically receive type-safety for `event` names.
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type EventMap = {
   change(value: string): void;
   count(value?: number): void;
   collect(values: boolean[]): void;
   rest(required: string, ...optional: string[]): void;
   nothing(): void;
 };
+
+// If you do prefer using `interface`, just know that:
+// 1. You MUST `extend` from `EmittenMap`.
+// 2. You will NOT receive type-safety for `event` names.
+export interface AltMap extends EmittenMap {
+  change(value: string): void;
+  count(value?: number): void;
+  collect(values: boolean[]): void;
+  rest(required: string, ...optional: string[]): void;
+  nothing(): void;
+}
 
 // Instantiate a new instance, passing the `EventMap`
 // as the generic to `Emitten`.
@@ -93,7 +109,10 @@ myEvents.emit('collect', [true, false, true]);
 // not exist in the `EventMap`, or passing a `value`
 // that is not compatible with the defined event’s
 // value type, will result in a TypeScript error.
+myEvents.on('nope', () => {});
+myEvents.off('nope', () => {});
 myEvents.emit('nope');
+
 myEvents.emit('change', '1st string', '2nd string');
 myEvents.emit('count', true);
 myEvents.emit('rest');
@@ -114,7 +133,8 @@ myEvents.empty();
 Since “derived classes” have access to the `protected` members of their “base class”, you can utilize `EmittenProtected` to both utilize `protected` members while also keeping them `protected` when instantiating your new `class`.
 
 ```ts
-type ExtendedEventMap = EmittenMap & {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type ExtendedEventMap = {
   custom(value: string): void;
   other(value: number): void;
 };
@@ -171,7 +191,8 @@ extended.empty();
 We can of course create classes that do not extend `Emitten`, and instead create a `private` instance of `Emitten` to perform event actions on.
 
 ```ts
-type AnotherMap = EmittenMap & {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type AnotherMap = {
   change(value: string): void;
   count(value?: number): void;
   names(...values: string[]): void;

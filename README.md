@@ -16,9 +16,8 @@ Import and start emit’in!
 
 ```ts
 import {Emitten} from 'emitten';
-import type {EmittenMap} from 'emitten';
 
-type EventMap = EmittenMap & {
+type EventMap = {
   change(value: string): void;
   count(value?: number): void;
   collect(...values: boolean[]): void;

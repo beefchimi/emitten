@@ -2,38 +2,6 @@
 
 This document describes some of the follow-up tasks I have in mind.
 
-## correctly type a custom `EventMap`
-
-- Currently, I get an error on the generic for `new Emitten<EventMap>()`:
-  - `Type 'EventMap' does not satisfy the constraint 'EmittenMap'.`
-  - `Index signature for type 'string' is missing in type 'EventMap'`
-
-```ts
-interface EventMap {
-  hello(value: string): void;
-  count(value: number): void;
-  multi(one: string, two: number, three?: boolean): void;
-  single(value?: boolean): void;
-  all(): void;
-}
-```
-
-At the moment, I need to make sure the `Generic` passed to `Emitten` always `extends EmittenMap`:
-
-```ts
-type EventMap = EmittenMap & {
-  hello(value: string): void;
-  count(value: number): void;
-  multi(one: string, two: number, three?: boolean): void;
-  single(value?: boolean): void;
-  all(): void;
-};
-
-const menuEvents = new Emitten<EventMap>();
-```
-
-It would be nice if I could avoid this.
-
 ## Write tests
 
 I have not actually authored any tests yet... but I plan to use `vitest` once I’m ready.
