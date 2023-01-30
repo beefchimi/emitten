@@ -1,5 +1,16 @@
 # emitten
 
+## 0.3.0
+
+### Minor Changes
+
+- 591f16d: - Prefer variadic listener arguments.
+  - Remove `.disposable()` method. Now returning the `dispose` function from `.on()`.
+
+### Patch Changes
+
+- e720e2b: New EmittenCommon for easier extension.
+
 ## 0.2.0
 
 ### Minor Changes
