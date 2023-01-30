@@ -140,9 +140,18 @@ type ExtendedEventMap = {
 };
 
 class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
+  // This example extends `EmittenProtected`, which protects all members.
   // If required, you can selectively expose any `protected` members.
-  // Otherwise, if you want all members to be `public`, you can
-  // extend the `Emitten` class instead.
+  // If you only want `off/on/once` and `activeEvents`, you can
+  // extend from `EmittenCommon`. Otherwise, if you want ALL
+  // members to be `public`, you can extend from `Emitten`.
+
+  public off<K extends keyof ExtendedEventMap>(
+    eventName: K,
+    listener: ExtendedEventMap[K],
+  ) {
+    super.off(eventName, listener);
+  }
 
   public on<K extends keyof ExtendedEventMap>(
     eventName: K,
@@ -150,13 +159,6 @@ class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
   ) {
     const dispose = super.on(eventName, listener);
     return dispose;
-  }
-
-  public off<K extends keyof ExtendedEventMap>(
-    eventName: K,
-    listener: ExtendedEventMap[K],
-  ) {
-    super.off(eventName, listener);
   }
 
   public emit<K extends keyof ExtendedEventMap>(
