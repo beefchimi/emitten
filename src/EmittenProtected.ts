@@ -40,6 +40,10 @@ export class EmittenProtected<T extends EmittenMap> {
     }
 
     this.#multiLibrary[eventName]?.add(listener);
+
+    return () => {
+      this.off(eventName, listener);
+    };
   }
 
   protected once<K extends keyof T>(eventName: K, listener: T[K]) {
@@ -48,14 +52,6 @@ export class EmittenProtected<T extends EmittenMap> {
     }
 
     this.#singleLibrary[eventName]?.add(listener);
-  }
-
-  protected disposable<K extends keyof T>(eventName: K, listener: T[K]) {
-    this.on(eventName, listener);
-
-    return () => {
-      this.off(eventName, listener);
-    };
   }
 
   protected emit<K extends keyof T>(eventName: K, ...values: Parameters<T[K]>) {

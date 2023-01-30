@@ -11,16 +11,12 @@ export class Emitten<T extends EmittenMap> extends EmittenProtected<T> {
   }
 
   public on<K extends keyof T>(eventName: K, listener: T[K]) {
-    super.on(eventName, listener);
+    const dispose = super.on(eventName, listener);
+    return dispose;
   }
 
   public once<K extends keyof T>(eventName: K, listener: T[K]) {
     super.once(eventName, listener);
-  }
-
-  public disposable<K extends keyof T>(eventName: K, listener: T[K]) {
-    const result = super.disposable(eventName, listener);
-    return result;
   }
 
   public emit<K extends keyof T>(eventName: K, ...values: Parameters<T[K]>) {
