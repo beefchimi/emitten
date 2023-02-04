@@ -1,5 +1,15 @@
 # emitten
 
+## 0.4.0
+
+### Minor Changes
+
+- cbf3729: Author test suite and require tests to pass on PRs.
+
+### Patch Changes
+
+- 279282d: Improve some documentation.
+
 ## 0.3.0
 
 ### Minor Changes
