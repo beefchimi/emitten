@@ -17,25 +17,23 @@ For this use case, you most likely want to use `Emitten` instead of `EmittenProt
 // There is an important distinction... using `type`, you will:
 // 1. Not need to `extend` from `EmittenMap`.
 // 2. Automatically receive type-safety for `event` names.
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type EventMap = {
-  change(value: string): void;
-  count(value?: number): void;
-  collect(values: boolean[]): void;
-  rest(required: string, ...optional: string[]): void;
-  nothing(): void;
+  change: (value: string) => void;
+  count: (value?: number) => void;
+  collect: (values: boolean[]) => void;
+  rest: (required: string, ...optional: string[]) => void;
+  nothing: () => void;
 };
 
 // If you do prefer using `interface`, just know that:
 // 1. You MUST `extend` from `EmittenMap`.
 // 2. You will NOT receive type-safety for `event` names.
 export interface AltMap extends EmittenMap {
-  change(value: string): void;
-  count(value?: number): void;
-  collect(values: boolean[]): void;
-  rest(required: string, ...optional: string[]): void;
-  nothing(): void;
+  change: (value: string) => void;
+  count: (value?: number) => void;
+  collect: (values: boolean[]) => void;
+  rest: (required: string, ...optional: string[]) => void;
+  nothing: () => void;
 }
 
 // Instantiate a new instance, passing the `EventMap`
@@ -133,10 +131,9 @@ myEvents.empty();
 Since “derived classes” have access to the `protected` members of their “base class”, you can utilize `EmittenProtected` to both utilize `protected` members while also keeping them `protected` when instantiating your new `class`.
 
 ```ts
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type ExtendedEventMap = {
-  custom(value: string): void;
-  other(value: number): void;
+  custom: (value: string) => void;
+  other: (value: number) => void;
 };
 
 class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
@@ -193,12 +190,11 @@ extended.empty();
 We can of course create classes that do not extend `Emitten`, and instead create a `private` instance of `Emitten` to perform event actions on.
 
 ```ts
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type AnotherMap = {
-  change(value: string): void;
-  count(value?: number): void;
-  names(...values: string[]): void;
-  diverse(first: string, second: number, ...last: boolean[]): void;
+  change: (value: string) => void;
+  count: (value?: number) => void;
+  names: (...values: string[]) => void;
+  diverse: (first: string, second: number, ...last: boolean[]) => void;
 };
 
 class AnotherExample {
