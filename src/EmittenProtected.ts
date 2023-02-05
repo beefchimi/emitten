@@ -1,8 +1,8 @@
-import type {EmittenMap, EmittenLibraryPartial} from './types';
+import type {EmittenMap, EmittenLibrary} from './types';
 
 export class EmittenProtected<T extends EmittenMap> {
-  #multiLibrary: EmittenLibraryPartial<T> = {};
-  #singleLibrary: EmittenLibraryPartial<T> = {};
+  #multiLibrary: EmittenLibrary<T> = new Map();
+  #singleLibrary: EmittenLibrary<T> = new Map();
 
   protected get activeEvents() {
     // This redundant getter + method are required
@@ -11,36 +11,36 @@ export class EmittenProtected<T extends EmittenMap> {
   }
 
   protected getActiveEvents() {
-    const multiKeys = Object.keys(this.#multiLibrary);
-    const singleKeys = Object.keys(this.#singleLibrary);
+    const multiKeys = this.#multiLibrary.keys();
+    const singleKeys = this.#singleLibrary.keys();
 
     const dedupedKeys = new Set([...multiKeys, ...singleKeys]);
-    const result: Array<keyof T> = [...dedupedKeys];
 
-    return result;
+    return [...dedupedKeys];
   }
 
   protected off<K extends keyof T>(eventName: K, listener: T[K]) {
-    const multiSet = this.#multiLibrary[eventName];
-    const singleSet = this.#singleLibrary[eventName];
+    this.#multiLibrary.get(eventName)?.delete(listener);
 
-    if (multiSet != null) {
-      multiSet.delete(listener);
-      if (multiSet.size === 0) delete this.#multiLibrary[eventName];
+    if (this.#multiLibrary.get(eventName)?.size === 0) {
+      this.#multiLibrary.delete(eventName);
     }
 
-    if (singleSet != null) {
-      singleSet.delete(listener);
-      if (singleSet.size === 0) delete this.#singleLibrary[eventName];
+    this.#singleLibrary.get(eventName)?.delete(listener);
+
+    if (this.#singleLibrary.get(eventName)?.size === 0) {
+      this.#singleLibrary.delete(eventName);
     }
   }
 
   protected on<K extends keyof T>(eventName: K, listener: T[K]) {
-    if (this.#multiLibrary[eventName] == null) {
-      this.#multiLibrary[eventName] = new Set();
+    if (!this.#multiLibrary.has(eventName)) {
+      this.#multiLibrary.set(eventName, new Set());
     }
 
-    this.#multiLibrary[eventName]?.add(listener);
+    // TypeScript doesn't understand that the above
+    // condition results in this `.get()` being defined.
+    this.#multiLibrary.get(eventName)?.add(listener);
 
     return () => {
       this.off(eventName, listener);
@@ -48,26 +48,25 @@ export class EmittenProtected<T extends EmittenMap> {
   }
 
   protected once<K extends keyof T>(eventName: K, listener: T[K]) {
-    if (this.#singleLibrary[eventName] == null) {
-      this.#singleLibrary[eventName] = new Set();
+    if (!this.#singleLibrary.has(eventName)) {
+      this.#singleLibrary.set(eventName, new Set());
     }
 
-    this.#singleLibrary[eventName]?.add(listener);
+    // TypeScript doesn't understand that the above
+    // condition results in this `.get()` being defined.
+    this.#singleLibrary.get(eventName)?.add(listener);
   }
 
   protected emit<K extends keyof T>(eventName: K, ...values: Parameters<T[K]>) {
-    const multiSet = this.#multiLibrary[eventName];
-    const singleSet = this.#singleLibrary[eventName];
-
-    multiSet?.forEach((listener) => {
+    this.#multiLibrary.get(eventName)?.forEach((listener) => {
       listener(...values);
     });
 
-    singleSet?.forEach((listener) => {
+    this.#singleLibrary.get(eventName)?.forEach((listener) => {
       listener(...values);
     });
 
-    delete this.#singleLibrary[eventName];
+    this.#singleLibrary.delete(eventName);
   }
 
   protected empty() {
@@ -75,13 +74,11 @@ export class EmittenProtected<T extends EmittenMap> {
     this.#every(this.#singleLibrary);
   }
 
-  #every = (library: EmittenLibraryPartial<T>) => {
-    for (const eventName in library) {
-      if (Object.hasOwn(library, eventName)) {
-        library[eventName]?.forEach((listener) => {
-          this.off(eventName, listener);
-        });
-      }
-    }
+  #every = (library: EmittenLibrary<T>) => {
+    library.forEach((collection, eventName) => {
+      collection.forEach((listener) => {
+        this.off(eventName, listener);
+      });
+    });
   };
 }

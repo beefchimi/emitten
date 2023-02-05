@@ -30,10 +30,9 @@ import {Emitten} from 'emitten';
 // Both the `eventName` and the `args` from the `listener` are
 // captured by TypeScript to assert type-safety!
 type EventMap = {
-  change(value: string): void;
-  count(value?: number): void;
-  collect(...values: boolean[]): void;
-  // Method signature style could also look like:
+  change: (value: string) => void;
+  count: (value?: number) => void;
+  collect: (...values: boolean[]) => void;
   other: (required: string, ...optional: string[]) => void;
 };
 

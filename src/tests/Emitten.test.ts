@@ -3,10 +3,10 @@ import {Emitten} from '../Emitten';
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type MockEventMap = {
-  foo(value: string): void;
-  bar(value?: number): void;
-  baz(...values: boolean[]): void;
-  qux(required: string, ...optional: string[]): void;
+  foo: (value: string) => void;
+  bar: (value?: number) => void;
+  baz: (...values: boolean[]) => void;
+  qux: (required: string, ...optional: string[]) => void;
 };
 
 describe('Emitten full public members', () => {
