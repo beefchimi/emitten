@@ -7,5 +7,4 @@ export type {
   EmittenListener,
   EmittenMap,
   EmittenLibrary,
-  EmittenLibraryPartial,
 } from './types';
