@@ -1,5 +1,11 @@
 # emitten
 
+## 0.4.1
+
+### Patch Changes
+
+- ad57620: Internally, switch the library values from an object to a Map.
+
 ## 0.4.0
 
 ### Minor Changes
