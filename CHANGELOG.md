@@ -1,5 +1,12 @@
 # emitten
 
+## 0.4.2
+
+### Patch Changes
+
+- 6326e71: Tweak eslint to prefer interface types.
+- 2a565e0: Revise examples doc.
+
 ## 0.4.1
 
 ### Patch Changes
