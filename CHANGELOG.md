@@ -1,5 +1,11 @@
 # emitten
 
+## 0.4.3
+
+### Patch Changes
+
+- 0322cd4: Simplify exported types.
+
 ## 0.4.2
 
 ### Patch Changes
