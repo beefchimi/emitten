@@ -19,6 +19,6 @@
     "noImplicitReturns": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*", "./vite.config.ts"],
+  "include": ["./vite.config.ts", "./src/**/*", "./config/**/*"],
   "exclude": ["./node_modules/**/*"]
 }
