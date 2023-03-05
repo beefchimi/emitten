@@ -11,4 +11,7 @@ export default defineConfig({
     minify: false,
   },
   plugins: [dts()],
+  test: {
+    setupFiles: 'config/tests-setup',
+  },
 });
