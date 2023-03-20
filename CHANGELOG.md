@@ -1,5 +1,11 @@
 # emitten
 
+## 0.5.0
+
+### Minor Changes
+
+- d15a2a1: Upgrade to TypeScript 5.
+
 ## 0.4.3
 
 ### Patch Changes
