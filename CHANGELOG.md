@@ -1,5 +1,11 @@
 # emitten
 
+## 0.5.1
+
+### Patch Changes
+
+- cb5c363: Various devDependency bumps.
+
 ## 0.5.0
 
 ### Minor Changes
