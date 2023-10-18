@@ -1,9 +1,9 @@
 🧰 Dependency: package-lock.json
 📚 Documentation:
-  - 'README.md'
-  - 'docs/**'
-⚖️ Legal: 'LICENSE'
-🔖 Release: 'CHANGELOG.md'
+  - README.md
+  - docs/**
+⚖️ Legal: LICENSE
+🔖 Release: CHANGELOG.md
 🧪 Testing: '**/*.test.ts'
 🛠️ Tooling:
   - .github/**
@@ -14,7 +14,7 @@
   - .gitignore
   - .nvmrc
   - .prettierrc
-  - 'config/**',
+  - config/**,
   - package.json
   - tsconfig.json
   - vite.config.ts
