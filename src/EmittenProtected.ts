@@ -1,8 +1,8 @@
 import type {EmittenMap, EmittenLibrary} from './types';
 
 export class EmittenProtected<T extends EmittenMap> {
-  #multiLibrary: EmittenLibrary<T> = new Map();
-  #singleLibrary: EmittenLibrary<T> = new Map();
+  readonly #multiLibrary: EmittenLibrary<T> = new Map();
+  readonly #singleLibrary: EmittenLibrary<T> = new Map();
 
   protected get activeEvents() {
     // This redundant getter + method are required
@@ -74,7 +74,7 @@ export class EmittenProtected<T extends EmittenMap> {
     this.#every(this.#singleLibrary);
   }
 
-  #every = (library: EmittenLibrary<T>) => {
+  readonly #every = (library: EmittenLibrary<T>) => {
     library.forEach((collection, eventName) => {
       collection.forEach((listener) => {
         this.off(eventName, listener);
