@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.0
+
+### Minor Changes
+
+- d94307b: Update to Vite 5
+
 ## 0.5.1
 
 ### Patch Changes
