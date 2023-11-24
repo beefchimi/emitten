@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.1
+
+### Patch Changes
+
+- 14efeef: Repeat types path in exports object to help mitigate failure to resolve types.
+
 ## 0.6.0
 
 ### Minor Changes
