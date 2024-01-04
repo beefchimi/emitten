@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.2
+
+### Patch Changes
+
+- 99030fb: Minor and patch dev dependency bumps.
+
 ## 0.6.1
 
 ### Patch Changes
