@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.3
+
+### Patch Changes
+
+- d0b7d4f: Minor prettier revisions.
+
 ## 0.6.2
 
 ### Patch Changes
