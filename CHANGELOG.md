@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.4
+
+### Patch Changes
+
+- b09eeac: Minor dependency bumps.
+
 ## 0.6.3
 
 ### Patch Changes
