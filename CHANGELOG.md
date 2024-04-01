@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.5
+
+### Patch Changes
+
+- a4bc47d: Fix missing dist folder.
+
 ## 0.6.4
 
 ### Patch Changes
