@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.7
+
+### Patch Changes
+
+- dbfb287: Switch to eslint flat config.
+
 ## 0.6.6
 
 ### Patch Changes
