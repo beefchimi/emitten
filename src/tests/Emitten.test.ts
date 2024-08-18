@@ -9,6 +9,9 @@ type MockEventMap = {
   qux: (required: string, ...optional: string[]) => void;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+function noop() {}
+
 describe('Emitten full public members', () => {
   describe('Typed instance', () => {
     const mockTyped = new Emitten<MockEventMap>();
@@ -150,6 +153,7 @@ describe('Emitten full public members', () => {
 
   describe('Un-typed instance', () => {
     const mockDefault = new Emitten();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSomething = vi.fn((anything?: any) => anything);
 
     it('accepts any event and listener signature', () => {
@@ -209,10 +213,10 @@ describe('Emitten full public members', () => {
     });
 
     it('retains a list of all active events', () => {
-      mockDefault.on('one', () => {});
-      mockDefault.on('two', () => {});
-      mockDefault.on('three', () => {});
-      mockDefault.on('four', () => {});
+      mockDefault.on('one', noop);
+      mockDefault.on('two', noop);
+      mockDefault.on('three', noop);
+      mockDefault.on('four', noop);
 
       expect(mockDefault.activeEvents).toStrictEqual([
         'one',
