@@ -1,5 +1,11 @@
 # emitten
 
+## 0.6.8
+
+### Patch Changes
+
+- 67b539c: Minor bump Node.
+
 ## 0.6.7
 
 ### Patch Changes
