@@ -1,7 +1,6 @@
 import {describe, it, expect, vi} from 'vitest';
 import {Emitten} from '../Emitten';
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type MockEventMap = {
   foo: (value: string) => void;
   bar: (value?: number) => void;
@@ -9,7 +8,6 @@ type MockEventMap = {
   qux: (required: string, ...optional: string[]) => void;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 function noop() {}
 
 describe('Emitten full public members', () => {
@@ -138,10 +136,7 @@ describe('Emitten full public members', () => {
 
       expect(handleQux).toHaveBeenCalledTimes(2);
       expect(handleQux).toHaveBeenCalledWith(mockEmitQuxRequired1);
-      expect(handleQux).toHaveBeenCalledWith(
-        mockEmitQuxRequired2,
-        ...mockEmitQuxOptional,
-      );
+      expect(handleQux).toHaveBeenCalledWith(mockEmitQuxRequired2, ...mockEmitQuxOptional);
     });
 
     it('empties out all registered events', () => {
@@ -153,7 +148,6 @@ describe('Emitten full public members', () => {
 
   describe('Un-typed instance', () => {
     const mockDefault = new Emitten();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSomething = vi.fn((anything?: any) => anything);
 
     it('accepts any event and listener signature', () => {
@@ -218,12 +212,7 @@ describe('Emitten full public members', () => {
       mockDefault.on('three', noop);
       mockDefault.on('four', noop);
 
-      expect(mockDefault.activeEvents).toStrictEqual([
-        'one',
-        'two',
-        'three',
-        'four',
-      ]);
+      expect(mockDefault.activeEvents).toStrictEqual(['one', 'two', 'three', 'four']);
     });
 
     it('empties out all registered events', () => {

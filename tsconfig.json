@@ -7,8 +7,6 @@
     "moduleResolution": "bundler",
     "strict": true,
     "allowJs": false,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -18,6 +16,6 @@
     "noImplicitReturns": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*", "./config/**/*", "./vite.config.ts", "./eslint.config.mjs"],
+  "include": ["./src/**/*", "./config/**/*", "./vite.config.ts"],
   "exclude": ["./node_modules/**/*"]
 }
