@@ -36,8 +36,8 @@
     }
   },
   "engines": {
-    "node": ">=24.0.0",
-    "npm": ">=10.8.0"
+    "node": ">=24.14.0",
+    "npm": ">=11.11.0"
   },
   "scripts": {
     "clean": "rm -rf coverage && rm -rf dist && rm -rf node_modules/.cache && rm -rf node_modules/.vite",
@@ -47,6 +47,7 @@
     "lint:fix": "oxlint --fix .",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
+    "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest --run --coverage",
@@ -55,13 +56,14 @@
     "release:publish": "changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.30.0",
+    "@changesets/cli": "^2.31.0",
+    "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.4",
     "@vitest/ui": "^4.1.4",
-    "oxfmt": "^0.44.0",
-    "oxlint": "^1.59.0",
-    "typescript": "^6.0.2",
-    "vite": "^8.0.8",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.9",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.4"
   }

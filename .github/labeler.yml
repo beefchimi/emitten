@@ -22,17 +22,17 @@
   - changed-files:
       - any-glob-to-any-file:
           [
+            '.changeset/**',
+            '.claude/**',
             '.github/**',
             '.vscode/**',
+            '.zed/**',
             '.editorconfig',
-            '.eslintignore',
-            '.eslintrc',
-            '.gitignore',
-            '.npmignore',
+            '.*ignore',
             '.nvmrc',
-            '.prettierrc',
+            '.ox*.json',
             'config/**',
-            'package.json',
-            'tsconfig.json',
-            'vite.config.ts',
+            '*.config.*',
+            'package*.json',
+            'tsconfig*.json',
           ]

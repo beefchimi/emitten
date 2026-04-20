@@ -1,4 +1,5 @@
-import {beforeEach, afterEach} from 'vitest';
+import {afterEach, vi} from 'vitest';
 
-beforeEach(() => {});
-afterEach(() => {});
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
