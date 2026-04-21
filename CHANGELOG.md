@@ -1,5 +1,11 @@
 # emitten
 
+## 0.7.0
+
+### Minor Changes
+
+- a4c71ed: Update minimum node version to 24.
+
 ## 0.6.8
 
 ### Patch Changes
