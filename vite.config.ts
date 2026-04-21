@@ -1,5 +1,5 @@
-import {defineConfig} from 'vite';
 import dts from 'vite-plugin-dts';
+import {defineConfig} from 'vitest/config';
 
 export default defineConfig({
   build: {
@@ -11,7 +11,4 @@ export default defineConfig({
     minify: false,
   },
   plugins: [dts({rollupTypes: true})],
-  test: {
-    setupFiles: 'config/tests-setup',
-  },
 });

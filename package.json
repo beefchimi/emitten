@@ -36,17 +36,18 @@
     }
   },
   "engines": {
-    "node": ">=20.16.0",
-    "npm": ">=10.8.0"
+    "node": ">=24.14.0",
+    "npm": ">=11.11.0"
   },
   "scripts": {
     "clean": "rm -rf coverage && rm -rf dist && rm -rf node_modules/.cache && rm -rf node_modules/.vite",
     "nuke": "npm run clean && rm -rf node_modules && rm -rf package-lock.json && npm cache clean --force",
     "build": "npm run clean && tsc && vite build",
-    "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest --run --coverage",
@@ -55,18 +56,15 @@
     "release:publish": "changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.7",
-    "@vitest/coverage-v8": "^2.0.5",
-    "@vitest/ui": "^2.0.5",
-    "eslint": "^8.57.0",
-    "eslint-config-love": "^62.0.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "globals": "^15.9.0",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.1",
-    "vite-plugin-dts": "^4.0.3",
-    "vitest": "^2.0.5"
+    "@changesets/cli": "^2.31.0",
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.4",
+    "@vitest/ui": "^4.1.4",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.9",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.4"
   }
 }

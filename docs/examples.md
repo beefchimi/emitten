@@ -181,17 +181,11 @@ type ExtendedEventMap = {
 // extend from `EmittenCommon`. Otherwise, if you want ALL
 // members to be `public`, you can extend from `Emitten`.
 class ExtendedEmitten extends EmittenProtected<ExtendedEventMap> {
-  public off<K extends keyof ExtendedEventMap>(
-    eventName: K,
-    listener: ExtendedEventMap[K],
-  ) {
+  public off<K extends keyof ExtendedEventMap>(eventName: K, listener: ExtendedEventMap[K]) {
     super.off(eventName, listener);
   }
 
-  public on<K extends keyof ExtendedEventMap>(
-    eventName: K,
-    listener: ExtendedEventMap[K],
-  ) {
+  public on<K extends keyof ExtendedEventMap>(eventName: K, listener: ExtendedEventMap[K]) {
     const dispose = super.on(eventName, listener);
     return dispose;
   }
@@ -353,14 +347,7 @@ document.addEventListener('click', () => {
   myExample.change('clicked');
   myExample.count();
   myExample.names(...otherData);
-  myExample.diverse(
-    'call to diverse',
-    myExample.currentCount,
-    true,
-    false,
-    true,
-    false,
-  );
+  myExample.diverse('call to diverse', myExample.currentCount, true, false, true, false);
 
   if (myExample.currentOther.length > otherCollection.length) {
     console.log('Events BEFORE emptying:', myExample.events);
